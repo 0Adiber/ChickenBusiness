@@ -1,0 +1,14 @@
+#status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#btn-upgrades {
+    width: 100%;
+    height: 10%;
+    background-color: coral;
+    color: white;
+    text-transform: uppercase;
+}
