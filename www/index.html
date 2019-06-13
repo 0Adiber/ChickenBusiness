@@ -18,9 +18,25 @@
             <p>Money: <span id="status-money"></span>€</p>
         </div>
         <div id="playground">
-
+            <img src="img/chicken.png" id="chicken"/>
         </div>
-        <button id="btn-upgrades">Upgrades</button>
+        <div id="upgrades-screen">
+            <div class="upgrades-row">
+                <div class="upgrades-item">
+                    Auto egg pickup
+                </div>
+                <div class="upgrades-item">
+                    +1 Chicken
+                </div>
+                <div class="upgrades-item">
+                    +1% Bigger egg probability
+                </div>
+                <div class="upgrades-item">
+                    +1 More food
+                </div>
+            </div>
+        </div>
+        <button id="btn-upgrades" onclick="showUpgrades()">Upgrades</button>
     </body>
     <script src="js/index.js"></script>
 </html>
