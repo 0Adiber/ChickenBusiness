@@ -2,7 +2,7 @@ var chickens = 1;
 var money = 0;
 var eggs = 0;
 
-var interval_eggs = 60000 * 20;//ms * 20 ticks = ticks
+var interval_eggs = 60 * 20;//ms * 20 ticks = ticks
 var bigger_eggs_possibility = 0; //0 = 0%, 100 = 100%, bigger eggs = more money
 var auto_pickup = false;
 
@@ -16,6 +16,10 @@ var upgrade_bigger_eggs = 100; //incrreases per buy; increases bigger_eggs_possi
 var upgrade_more_food = 50; //increases per buy; decreaes intervall_eggs
 var upgrade_auto_pickup = 1000;//one-time; sets auto_pickup to true
 
+//current eggs
+var eggs = [];
+
+//Main
 var current_interval_eggs = 0;
 var game = setInterval(function doGameTick() {
     if(current_interval_eggs > interval_eggs) {
@@ -26,17 +30,38 @@ var game = setInterval(function doGameTick() {
     document.querySelector("#status-chicken").innerHTML = chickens;
     document.querySelector("#status-money").innerHTML = money;
     
-    current_interval_eggs+=20;
+    current_interval_eggs++;
 }, 50); //= 20 ticks/s or 50ms
 
 async function layEggs() {
-    let eggs = {};
+    let rect = document.querySelector("#eggground").getBoundingClientRect();
+
     for(let i = 0; i<chickens; i++) {
         let rand = Math.random()*100;
+
+        let posX = Math.floor((Math.random()*rect.width) + rect.left);
+        let posY = Math.floor((Math.random()*rect.height) + rect.top);
+
         if(rand < bigger_eggs_possibility) {
-            eggs[i] = 2;
+            eggs.push(new Egg(2, posX, posY));
         } else {
-            eggs[i] = 1;
+            eggs.push(new Egg(1, posX, posY));
+        }
+    }
+    drawEggs();
+}
+
+async function drawEggs() {
+    for(let e of eggs) {
+        if(e.notDrawn) {
+            let img = document.createElement("img");
+            img.src = "img/egg.png";
+            img.style.left = e.posX + "px";
+            img.style.top = e.posY + "px";
+            img.classList.add("egg-img");
+            console.log(e.posX + "," + e.posY + "," + img.classList)
+            document.querySelector("#eggground").appendChild(img);
+            e.notDrawn = false;
         }
     }
 }

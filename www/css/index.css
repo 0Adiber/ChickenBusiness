@@ -13,6 +13,8 @@ body,html {
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-around;
+    position: relative;
+    height: 40px;
 }
 
 #btn-upgrades {
@@ -33,6 +35,18 @@ body,html {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -60%);
+}
+
+#playground {
+    position: absolute;
+    width: 100%;
+    height: calc(90% - 40px);
+}
+
+#eggground {
+    width: 100%;
+    height: 40%;
+    transform: translateY(150%);
 }
 
 #upgrades-screen {
@@ -59,4 +73,9 @@ body,html {
     justify-content: space-around;
     flex-direction: column;
     text-align: center;
+}
+
+.egg-img {
+    height: 50px;
+    position: absolute;
 }
