@@ -1,11 +1,11 @@
 var chickens = 1;
-var money = 0;
+var money = 10;
 var eggs = 0;
 
-var food = 0;   //max 100
-var bigger_eggs_possibility = 0; //0 = 0%, 100 = 100%, bigger eggs = more money
+var food = 1;   //max 100
+var bigger_eggs_possibility = 1; //0 = 0%, 100 = 100%, bigger eggs = more money
 
-var interval_eggs = (60 / (0.01 * food)) * 20;//ms * 20 ticks = ticks //max: alle 6 sekunden ein egg
+var interval_eggs = (60 / (0.1 * food)) * 20;//ms * 20 ticks = ticks //max: alle 6 sekunden ein egg
 var auto_pickup = false;
 
 //
@@ -24,18 +24,33 @@ var eggs = [];
 //Main
 var current_interval_eggs = 0;
 var game = setInterval(function doGameTick() {
+    countdown();
     if(current_interval_eggs > interval_eggs) {
         current_interval_eggs = 0;
+        interval_eggs = (60 / (0.1 * food)) * 20;
         layEggs();
     }
 
     document.querySelector("#status-chicken").innerHTML = chickens;
-    document.querySelector("#status-money").innerHTML = money;
+    document.querySelector("#status-money").innerHTML = parseFloat(money).toFixed(2);
     document.querySelector("#status-food").innerHTML = food;
     document.querySelector("#status-bep").innerHTML = bigger_eggs_possibility;
+
+    document.querySelector("#upgrades-cost-ap").innerHTML = "(" + upgrade_auto_pickup + "$)";
+    document.querySelector("#upgrades-cost-chicken").innerHTML = "(" + upgrade_chickens + "$)";
+    document.querySelector("#upgrades-cost-bep").innerHTML = "(" + upgrade_bigger_eggs + "$)";
+    document.querySelector("#upgrades-cost-food").innerHTML = "(" + upgrade_more_food + "$)";
     
+    if(auto_pickup == true) {
+        autoPickup();
+    }
+
     current_interval_eggs++;
 }, 50); //= 20 ticks/s or 50ms
+
+async function countdown() {
+    document.querySelector("#status-countdown").innerHTML = Math.round(interval_eggs/20) - Math.round(current_interval_eggs/20) + "s";
+}
 
 async function layEggs() {
     let rect = document.querySelector("#eggground").getBoundingClientRect();
@@ -43,8 +58,8 @@ async function layEggs() {
     for(let i = 0; i<chickens; i++) {
         let rand = Math.random()*100;
 
-        let posX = Math.floor((Math.random()*rect.width) + rect.left);
-        let posY = Math.floor((Math.random()*rect.height) + rect.top);
+        let posX = Math.floor((Math.random()*rect.width-25) + rect.left);
+        let posY = Math.floor((Math.random()*rect.height-50) + rect.top);
 
         if(rand < bigger_eggs_possibility) {
             eggs.push(new Egg(2, posX, posY));
@@ -59,7 +74,11 @@ function drawEggs() {
     for(let e of eggs) {
         if(e.notDrawn) {
             let img = document.createElement("img");
-            img.src = "img/egg.png";
+            if(e.type == 1) {
+                img.src = "img/eggs/egg_default.png";
+            } else {
+                img.src = "img/eggs/egg_gold.png";
+            }
             img.style.left = e.posX + "px";
             img.style.top = e.posY + "px";
             img.classList.add("egg-img");
@@ -67,9 +86,9 @@ function drawEggs() {
             img.addEventListener('click', function() {
                 pickUpEgg(this);
             });
-            console.log(e.posX + "," + e.posY + "," + img.classList)
             document.querySelector("#eggground").appendChild(img);
             e.notDrawn = false;
+            e.img = img;
         }
     }
 }
@@ -99,6 +118,15 @@ async function showUpgrades() {
     }
 }
 
+async function autoPickup() {
+    setTimeout(function() {
+        if(eggs.length > 0) {
+            pickUpEgg(eggs[0].img);
+            autoPickup();
+        }
+    }, 300);
+}
+
 async function pickUpEgg(img) {
     let type = img.getAttribute('type');
     if(type == 1) {
@@ -107,4 +135,36 @@ async function pickUpEgg(img) {
         money+=reward_big_egg;
     }
     img.parentNode.removeChild(img);
+
+    $.each(eggs, function(i) {
+        if(eggs[i].img == img) {
+           eggs.splice(i,1);
+           return false;
+        }
+    });
+
+}
+
+async function upgrade(type) {
+    //0 = auto pickup
+    //1 = chicken
+    //2 = bigger egg
+    //3 = food
+    if(type == 0 && money >= upgrade_auto_pickup && !auto_pickup) {
+        auto_pickup = true;
+        money-=upgrade_auto_pickup;
+    } else if(type == 1 && money >= upgrade_chickens) {
+        chickens+=1;
+        money-=upgrade_chickens;
+        upgrade_chickens = parseFloat(upgrade_chickens*=1.41).toFixed(2);
+    } else if(type == 2 && money >= upgrade_bigger_eggs && bigger_eggs_possibility < 100) {
+        bigger_eggs_possibility+=1;
+        money-=upgrade_bigger_eggs;
+        upgrade_bigger_eggs = parseFloat(upgrade_bigger_eggs*=2.73).toFixed(2);
+    } else if(type == 3 && money >= upgrade_more_food && food < 100) {
+        food += 1;
+        money-=upgrade_more_food;
+        interval_eggs = (60 / (0.1 * food)) * 20 - current_interval_eggs;
+        upgrade_more_food = parseFloat(upgrade_more_food*3.89).toFixed(2);
+    }
 }

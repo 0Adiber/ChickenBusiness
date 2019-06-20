@@ -48,7 +48,8 @@ body,html {
 #eggground {
     width: 100%;
     height: 40%;
-    transform: translateY(150%);
+    position: fixed;
+    bottom: 100px;
 }
 
 #upgrades-screen {
@@ -89,7 +90,7 @@ body,html {
 
 .egg-img {
     height: 50px;
-    position: absolute;
+    position: fixed;
 }
 
 #egg-source {
@@ -147,4 +148,8 @@ body,html {
   /* Show the tooltip text when you mouse over the tooltip container */
   .upgrades-tooltip:hover .upgrades-tooltip-text {
     visibility: visible;
+  }
+
+  #status-countdown-top {
+      font-weight: bold;
   }

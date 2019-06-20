@@ -14,10 +14,11 @@
     </head>
     <body>
         <div id="status-bar">
-            <p>Chicken: <span id="status-chicken"></span></p>
+            <p>Chickens: <span id="status-chicken"></span></p>
             <p>Food: <span id="status-food"></span></p>
+            <p id="status-countdown-top">Next eggs in: <span id="status-countdown"></span></p>
             <p>Bigger egg: <span id="status-bep"></span>%</p>
-            <p>Money: <span id="status-money"></span>€</p>
+            <p>Money: <span id="status-money"></span>$</p>
         </div>
         <div id="playground">
             <img src="img/breeder.png" id="chicken"/>
@@ -26,37 +27,37 @@
         </div>
         <div id="upgrades-screen">
             <div id="upgrades-column">
-                <div class="upgrades-item"> <!--Auto Pickup-->
+                <div class="upgrades-item" onclick="upgrade(0)"> <!--Auto Pickup-->
                     <div class="upgrades-item-row">
                         <img src="img/auto-pickup.png" class="upgrades-img">
-                        <p class="upgrades-text">Auto egg pickup</p>
+                        <p class="upgrades-text">Auto egg pickup<span id="upgrades-cost-ap"></span></p>
                         <div class="upgrades-tooltip">&lt?&gt
                             <span class="upgrades-tooltip-text">Automatically picks up eggs</span>
                         </div>
                     </div>
                 </div>
-                <div class="upgrades-item"> <!--+1 chicken-->
+                <div class="upgrades-item" onclick="upgrade(1)"> <!--+1 chicken-->
                     <div class="upgrades-item-row">
                         <img src="img/chicken.png" class="upgrades-img">
-                        <p class="upgrades-text">+1 Chicken</p>
+                        <p class="upgrades-text">+1 Chicken<span id="upgrades-cost-chicken"></span></p>
                         <div class="upgrades-tooltip">&lt?&gt
                             <span class="upgrades-tooltip-text">Adds one more chicken to your stall. More chickens = more eggs</span>
                         </div>
                     </div>
                 </div>
-                <div class="upgrades-item"> <!--+1% bigger egg-->
+                <div class="upgrades-item" onclick="upgrade(2)"> <!--+1% bigger egg-->
                     <div class="upgrades-item-row">
                         <img src="img/bep.png" class="upgrades-img">
-                        <p class="upgrades-text">+1% Bigger egg</p>
+                        <p class="upgrades-text">+1% Bigger egg <span id="upgrades-cost-bep"></span></p>
                         <div class="upgrades-tooltip">&lt?&gt
                             <span class="upgrades-tooltip-text">Increases the probabilty of getting bigger eggs by 1%. Maximum = 100%</span>
                         </div>
                     </div>
                 </div>
-                <div class="upgrades-item"> <!--+1 more food-->
+                <div class="upgrades-item" onclick="upgrade(3)"> <!--+1 more food-->
                     <div class="upgrades-item-row">
                         <img src="img/food.png" class="upgrades-img">
-                        <p class="upgrades-text">+1 More food</p>
+                        <p class="upgrades-text">+1 More food<span id="upgrades-cost-food"></span></p>
                         <div class="upgrades-tooltip">&lt?&gt
                             <span class="upgrades-tooltip-text">Adds more Food. This decreases the waiting time for eggs being laid. Maximum = 100</span>
                         </div>
