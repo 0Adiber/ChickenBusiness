@@ -15,26 +15,52 @@
     <body>
         <div id="status-bar">
             <p>Chicken: <span id="status-chicken"></span></p>
+            <p>Food: <span id="status-food"></span></p>
+            <p>Bigger egg: <span id="status-bep"></span>%</p>
             <p>Money: <span id="status-money"></span>€</p>
         </div>
         <div id="playground">
-            <img src="img/chicken.png" id="chicken"/>
-            <canvas id="eggground">
-            </canvas>
+            <img src="img/breeder.png" id="chicken"/>
+            <div id="eggground">
+            </div>
         </div>
         <div id="upgrades-screen">
-            <div class="upgrades-row">
-                <div class="upgrades-item">
-                    Auto egg pickup
+            <div id="upgrades-column">
+                <div class="upgrades-item"> <!--Auto Pickup-->
+                    <div class="upgrades-item-row">
+                        <img src="img/auto-pickup.png" class="upgrades-img">
+                        <p class="upgrades-text">Auto egg pickup</p>
+                        <div class="upgrades-tooltip">&lt?&gt
+                            <span class="upgrades-tooltip-text">Automatically picks up eggs</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="upgrades-item">
-                    +1 Chicken
+                <div class="upgrades-item"> <!--+1 chicken-->
+                    <div class="upgrades-item-row">
+                        <img src="img/chicken.png" class="upgrades-img">
+                        <p class="upgrades-text">+1 Chicken</p>
+                        <div class="upgrades-tooltip">&lt?&gt
+                            <span class="upgrades-tooltip-text">Adds one more chicken to your stall. More chickens = more eggs</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="upgrades-item">
-                    +1% Bigger egg probability
+                <div class="upgrades-item"> <!--+1% bigger egg-->
+                    <div class="upgrades-item-row">
+                        <img src="img/bep.png" class="upgrades-img">
+                        <p class="upgrades-text">+1% Bigger egg</p>
+                        <div class="upgrades-tooltip">&lt?&gt
+                            <span class="upgrades-tooltip-text">Increases the probabilty of getting bigger eggs by 1%. Maximum = 100%</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="upgrades-item">
-                    +1 More food
+                <div class="upgrades-item"> <!--+1 more food-->
+                    <div class="upgrades-item-row">
+                        <img src="img/food.png" class="upgrades-img">
+                        <p class="upgrades-text">+1 More food</p>
+                        <div class="upgrades-tooltip">&lt?&gt
+                            <span class="upgrades-tooltip-text">Adds more Food. This decreases the waiting time for eggs being laid. Maximum = 100</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

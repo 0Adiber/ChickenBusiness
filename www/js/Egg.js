@@ -1,8 +1,8 @@
 class Egg {
     notDrawn = true;
-    constructor(size, posX, posY) {
-        this.size = size;
+    constructor(type, posX, posY) {
         this.posX = posX;
         this.posY = posY;
+        this.type = type;
     }
 };
