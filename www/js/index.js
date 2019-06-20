@@ -51,7 +51,16 @@ async function layEggs() {
     drawEggs();
 }
 
-async function drawEggs() {
+function drawEggs() {
+    let c = document.getElementById("eggground");
+    let ctx = c.getContext('2d');
+    let img = new Image();
+    img.onload = function() {
+      ctx.drawImage(img, 1, 1, 50, 50);
+    };
+    img.src = "./img/egg.png";  
+
+    /*
     for(let e of eggs) {
         if(e.notDrawn) {
             let img = document.createElement("img");
@@ -63,7 +72,7 @@ async function drawEggs() {
             document.querySelector("#eggground").appendChild(img);
             e.notDrawn = false;
         }
-    }
+    }*/
 }
 
 let inUpgradeScreen = false;

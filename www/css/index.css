@@ -79,3 +79,7 @@ body,html {
     height: 50px;
     position: absolute;
 }
+
+#egg-source {
+    display: none;
+}
