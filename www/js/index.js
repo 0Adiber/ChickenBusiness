@@ -4,13 +4,14 @@ var eggs = 0;
 
 var food = 1;   //max 100
 var bigger_eggs_possibility = 1; //0 = 0%, 100 = 100%, bigger eggs = more money
+var food_multiplier = 1; //schauen, dass das mit food geupdated wird!!!
 
-var interval_eggs = (60 / (0.1 * food)) * 20;//ms * 20 ticks = ticks //max: alle 6 sekunden ein egg
+var interval_eggs = (60 / food_multiplier) * 20;//ms * 20 ticks = ticks //max: 60s min: 6s
 var auto_pickup = false;
 
-//
-var reward_small_egg = 5;
-var reward_big_egg = 7;
+//rewards
+var reward_small_egg = 7;
+var reward_big_egg = 13;
 
 //upgrades = cost
 var upgrade_chickens = 10; //increases per buy; increases chicken count
