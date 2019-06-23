@@ -1,21 +1,23 @@
 var chickens = 1;
-var money = 10;
+var money = 17;
 
 var food = 1;   //max 100
 var bigger_eggs_possibility = 1; //0 = 0%, 100 = 100%, bigger eggs = more money
-
-var interval_eggs = (6 / (0.1 * food)) * 20;//ms * 20 ticks = ticks //max: 60s min: 6s
+var prestige_level = 0; //no max
+var interval_eggs = 999;//ms * 20 ticks = ticks //max: 80s min: 8s
+calcInterval();
 var auto_pickup = false;
 
 //rewards
-var reward_small_egg = 7;
-var reward_big_egg = 13;
+var reward_small_egg = 7*(prestige_level+1);
+var reward_big_egg = 13*(prestige_level+1);
 
 //upgrades = cost
 var upgrade_chickens = 10; //increases per buy; increases chicken count
 var upgrade_bigger_eggs = 100; //incrreases per buy; increases bigger_eggs_possibility
 var upgrade_more_food = 50; //increases per buy; decreaes intervall_eggs
 var upgrade_auto_pickup = 1000;//one-time; sets auto_pickup to true
+var upgrade_prestige = 20000;
 
 //current eggs
 var eggs = [];
@@ -32,7 +34,7 @@ var game = setInterval(function doGameTick() {
 
     if(current_interval_eggs > interval_eggs) {
         current_interval_eggs = 0;
-        interval_eggs = (6 / (0.1 * food)) * 20;
+        calcInterval();
         layEggs();
     }
 
@@ -40,11 +42,13 @@ var game = setInterval(function doGameTick() {
     document.querySelector("#status-money").innerHTML = parseFloat(money).toFixed(2);
     document.querySelector("#status-food").innerHTML = food;
     document.querySelector("#status-bep").innerHTML = bigger_eggs_possibility;
+    document.querySelector("#status-prestige").innerHTML = prestige_level;
 
     document.querySelector("#upgrades-cost-ap").innerHTML = "(" + upgrade_auto_pickup + "$)";
     document.querySelector("#upgrades-cost-chicken").innerHTML = "(" + upgrade_chickens + "$)";
     document.querySelector("#upgrades-cost-bep").innerHTML = "(" + upgrade_bigger_eggs + "$)";
     document.querySelector("#upgrades-cost-food").innerHTML = "(" + upgrade_more_food + "$)";
+    document.querySelector("#upgrades-cost-prestige").innerHTML = "(" + upgrade_prestige + "$)";
     
     if(auto_pickup == true) {
         autoPickup();
@@ -109,7 +113,7 @@ async function showUpgrades(param) {
 
         let upgrades = document.getElementsByClassName("upgrades-item");
         for(let u of upgrades) {
-            u.style.height = "calc((100vh - 100px) / 4)";
+            u.style.height = "calc((100vh - 100px) / 5)";
         }
 
         inUpgradeScreen = true;
@@ -119,7 +123,7 @@ async function showUpgrades(param) {
 
         let upgrades = document.getElementsByClassName("upgrades-item");
         for(let u of upgrades) {
-            u.style.height = "calc(100px / 4)";
+            u.style.height = "calc(100px / 5)";
         }
 
         inUpgradeScreen = false;
@@ -158,6 +162,7 @@ async function upgrade(type) {
     //1 = chicken
     //2 = bigger egg
     //3 = food
+    //4 = prestige
     if(type == 0 && money >= upgrade_auto_pickup && !auto_pickup) {
         auto_pickup = true;
         money-=upgrade_auto_pickup;
@@ -172,9 +177,29 @@ async function upgrade(type) {
     } else if(type == 3 && money >= upgrade_more_food && food < 100) {
         food += 1;
         money-=upgrade_more_food;
-        interval_eggs = (60 / (0.1 * food)) * 20;
+        calcInterval();
         upgrade_more_food = parseFloat(upgrade_more_food*3.89).toFixed(2);
+    } else if(type == 4 && money >= upgrade_prestige) {
+        prestigeUp();
     }
+}
+
+async function prestigeUp() {
+    prestige_level+=1;
+    money = 17;
+    eggs = [];
+    food = 1;
+    chickens = 1;
+    upgrade_chickens = 10;
+    upgrade_bigger_eggs = 100;
+    upgrade_more_food = 50;
+    upgrade_auto_pickup = 1000;
+    upgrade_prestige = parseFloat(upgrade_prestige * (1+ ((prestige_level+1)/3))).toFixed(2);
+    reward_small_egg = 7*(prestige_level+1);
+    reward_big_egg = 13*(prestige_level+1);
+    auto_pickup = false;
+    onPause();
+    window.location.reload();
 }
 
 //window close safe
@@ -195,6 +220,8 @@ function onPause() {
         upgrade_bigger_eggs: upgrade_bigger_eggs,
         auto_pickup: auto_pickup,
         last_time: time-current_interval_eggs/20*1000,
+        prestige_level: prestige_level,
+        upgrade_prestige: upgrade_prestige,
     };
     localStorage.setItem('gameState', JSON.stringify(toSafe));
     
@@ -209,6 +236,7 @@ function onResume() {
     if(toRetrieve == undefined) {
         return;
     }
+    prestige_level = toRetrieve.prestige_level;
     money = toRetrieve.money;
     eggs = toRetrieve.eggs;
     for(let e of eggs) {
@@ -222,8 +250,9 @@ function onResume() {
     upgrade_more_food = toRetrieve.upgrade_food;
     upgrade_bigger_eggs = toRetrieve.upgrade_bigger_eggs;
     auto_pickup = toRetrieve.auto_pickup;
+    upgrade_prestige = toRetrieve.upgrade_prestige;
 
-    interval_eggs = (6 / (0.1 * food)) * 20;
+    calcInterval();
 
     let time_elapsed = Date.now() - toRetrieve.last_time;
     time_elapsed = time_elapsed / 1000;
@@ -251,3 +280,7 @@ document.hasFocus();
 
 window.addEventListener("focus", () => onResume());
 window.addEventListener("blur", () => onPause());
+
+async function calcInterval() {
+    interval_eggs = ((8 / (0.1 * food)) * 20 - (prestige_level%5));
+}

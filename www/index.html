@@ -19,6 +19,7 @@
             <p id="status-countdown-top">Next eggs in: <span id="status-countdown"></span></p>
             <p>Bigger egg: <span id="status-bep"></span>%</p>
             <p>Money: <span id="status-money"></span>$</p>
+            <p>Prestige: <span id="status-prestige"></span></p>
         </div>
         <div id="playground">
             <img src="img/breeder.png" id="chicken"/>
@@ -60,6 +61,15 @@
                         <p class="upgrades-text">+1 More food<span id="upgrades-cost-food"></span></p>
                         <div class="upgrades-tooltip">&lt?&gt
                             <span class="upgrades-tooltip-text">Adds 1 more Food. This decreases the waiting time for eggs being laid. Maximum = 100</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="upgrades-item" onclick="upgrade(4)"> <!--+1 prestige level-->
+                    <div class="upgrades-item-row">
+                        <img src="img/d.png" class="upgrades-img">
+                        <p class="upgrades-text">Upgrade your Prestige Level<span id="upgrades-cost-prestige"></span></p>
+                        <div class="upgrades-tooltip">&lt?&gt
+                            <span class="upgrades-tooltip-text">Prestige Level +1 -> More money out of eggs & faster egg-lay-times</span>
                         </div>
                     </div>
                 </div>
